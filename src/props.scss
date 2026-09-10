@@ -1,0 +1,14 @@
+*{
+    font-family: Montserrat;
+}
+.AddStockCard{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    input{
+        border-radius: 5px;
+    }
+    button{
+        align-self: end;
+    }
+}

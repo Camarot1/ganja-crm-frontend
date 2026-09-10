@@ -1,5 +1,6 @@
 import { type WarehousesProps } from './api/request'
-
+import { useState } from 'react'
+import './props.scss'
 export const WarehosesCard = (props: WarehousesProps) => {
     return (
         <div className="warehouses-props">
@@ -29,5 +30,91 @@ export const ProductsCard = (props: ProductsProps) => {
             }
             {props.onClick && <button onClick={props.onClick}>{props.buttonText}</button>}
         </div>
+    )
+}
+
+
+export interface AddStock {
+    quantity: number
+    product_id: number
+}
+
+interface AddStockProps {
+    onSubmit: (data: AddStock) => void
+}
+
+export const AddStockCard = (props: AddStockProps) => {
+
+    const [stockFormData, setStockFormData] = useState<AddStock>({
+        quantity: 0,
+        product_id: 0
+    })
+
+    const handleUpdate = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setStockFormData({ ...stockFormData, [e.target.name]: e.target.value })
+    }
+
+    const handleAddStock = (e: React.FormEvent) => {
+        e.preventDefault()
+        props.onSubmit(stockFormData)
+    }
+
+    return (
+        <form onSubmit={handleAddStock} className='AddStockCard'>
+            <div>
+                <p>Количество</p>
+                <input type="number" name="quantity" value={stockFormData.quantity} onChange={handleUpdate} />
+            </div>
+            <div>
+                <p>Айди товара</p>
+                <input type="number" name="product_id" value={stockFormData.product_id} onChange={handleUpdate} />
+            </div>
+            <button type='submit'>Отправить</button>
+        </form>
+    )
+}
+
+export interface Quantity {
+    quantity: string
+    warehouses_id: string
+    product_id: number
+}
+
+
+
+interface QuantityProps {
+    warehouses_id: string
+    product_id: number
+    status?: string
+    onSubmit: (data:Quantity) => void
+}
+
+export const SetQuantity = ({onSubmit, warehouses_id,product_id, status}: QuantityProps) =>{
+
+    const [input, setInput] = useState('')
+
+    const handleSubmit = (e:React.FormEvent) =>{
+        e.preventDefault()
+
+        const data: Quantity = {
+            quantity: input,
+            warehouses_id: warehouses_id,
+            product_id: product_id 
+        }
+
+        onSubmit(data)
+        setInput('')
+
+    }
+
+    return(
+        <form onSubmit={handleSubmit} className="addquantity">
+            <div>
+                <p>Количество</p>
+                <input type="text" name="quantity" value={input} onChange={(a) => setInput(a.target.value)} />
+                <button type="submit">{status === 'delete' ? 'Удалить' : 'Добавить'}</button>
+            </div>
+
+        </form>
     )
 }

@@ -48,6 +48,7 @@ export type ProductsProps = Partial<InfoStock> & Partial<Products> & {
     buttonText?: string
 }
 
+
 const server = 'http://localhost:4000'
 export async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
     const res = await fetch (`${server}${endpoint}`, {
