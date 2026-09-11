@@ -7,9 +7,12 @@ import ProductsPage from './pages/products/products.tsx';
 import AddProductsPage from './pages/products/addproducts.tsx';
 import InfoProductsPage from './pages/products/infoproducts.tsx';
 
+
+import MainPage from './pages/main.tsx'
 function App() {
     return (
         <Routes>
+            <Route path="/" element={<MainPage />} />
             <Route path="/warehouses" element={<WarehousesPage />} />
             <Route path="/addwarehouses" element={<AddWarehousesPage />} />
             <Route path="/infowarehouses/:id" element={<InfoWarehousesPage />} />

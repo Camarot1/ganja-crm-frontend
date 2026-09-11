@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import './warehouses.scss'
 import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity } from "../../props";
-
+import { type Products } from "../../api/request";
 const InfoWarehousesPage = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
@@ -12,8 +12,10 @@ const InfoWarehousesPage = () => {
     const [isActive, setIsActive] = useState(false)
     const [loading, setLoading] = useState(true)
 
+    const [windowData, setWindowData] = useState<Products[] | null>(null)
+
     const [activeAddProduct, setActiveAddProduct] = useState<number | null>(null)
-    const [activeDeleteProduct, setActiveDeleteProduct] = useState<number| null>(null)
+    const [activeDeleteProduct, setActiveDeleteProduct] = useState<number | null>(null)
 
     const loadStock = async () => {
         try {
@@ -71,13 +73,22 @@ const InfoWarehousesPage = () => {
     }
 
     const handleDeleteQuantity = async (data: Quantity) => {
-        try{
+        try {
             await apiFetch('/products/removequantity', {
                 method: "POST",
                 body: JSON.stringify(data)
             })
             loadStock()
-        }catch(error){
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleWindowData = async (e: number) => {
+        try {
+            const data = await apiFetch<Products[]>(`/products/${e}`)
+            setWindowData(data)
+        } catch (error) {
             console.log(error)
         }
     }
@@ -86,7 +97,7 @@ const InfoWarehousesPage = () => {
     if (loading) return (<div>Загрузка</div>)
     if (!warehouses) return (<div>Склад не найден</div>)
     return (
-        <div>
+        <div className="info-warehouses">
             <button onClick={() => navigate(`/warehouses`)}>Список складов</button>
             {warehouses?.map(item => (
                 <WarehosesCard key={item.id} {...item} />
@@ -102,15 +113,29 @@ const InfoWarehousesPage = () => {
                     <>
                         <ProductsCard key={item.id}
                             {...item}
-                            onClick={() => navigate(`/infoproducts/${item.id}`)}
+                            onClick={() => handleWindowData(item.id)}
                             buttonText={'Информация по товару'} />
-                        <button onClick={() => setActiveAddProduct(activeAddProduct === item.id ? null : item.id)}>{activeAddProduct === item.id ? 'Закрыть' : 'Добавить товар'}</button>
-                        {activeAddProduct === item.id && <SetQuantity warehouses_id={String(id)} product_id={item.id} onSubmit={handleAddQuantity}  />}
-                        <button onClick={() => setActiveDeleteProduct(activeDeleteProduct === item.id ? null : item.id)}>{activeDeleteProduct === item.id ? 'Закрыть' : 'Удалить продукт'}</button>
+                        <button onClick={() => setActiveAddProduct(activeAddProduct === item.id ? null : item.id)}>{activeAddProduct === item.id ? 'Закрыть' : 'Увеличение товара'}</button>
+                        {activeAddProduct === item.id && <SetQuantity warehouses_id={String(id)} product_id={item.id} onSubmit={handleAddQuantity} />}
+                        <button onClick={() => setActiveDeleteProduct(activeDeleteProduct === item.id ? null : item.id)}>{activeDeleteProduct === item.id ? 'Закрыть' : 'Уменьшение товара'}</button>
                         {activeDeleteProduct === item.id && <SetQuantity warehouses_id={String(id)} product_id={item.id} status='delete' onSubmit={handleDeleteQuantity} />}
                     </>
                 )))
             }
+            {windowData && (
+                <div className="window-overlay" onClick={() => setWindowData(null)}>
+                    <div className="window-content" onClick={(e) => e.stopPropagation()}>
+                        {windowData.map(item => (
+                            <ProductsCard
+                                key={item.id}
+                                {...item}
+                                buttonText={'Закрыть'}
+                                onClick={() => setWindowData(null)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

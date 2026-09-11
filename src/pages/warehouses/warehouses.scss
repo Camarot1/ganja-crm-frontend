@@ -1,9 +1,33 @@
-.warehouses__block{
+.warehouses__block {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.stock__block{
+
+.stock__block {
     display: flex;
-    gap:10px;
+    gap: 10px;
+}
+.window-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.window-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }

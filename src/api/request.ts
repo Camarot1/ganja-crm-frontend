@@ -17,8 +17,8 @@ export interface Products{
     sku: string
     name: string
     description: string
-    unit: string
-    price: number
+    unit?: string
+    price: string
     is_active: number
 }
 
