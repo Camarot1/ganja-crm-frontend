@@ -4,6 +4,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import './warehouses.scss'
 import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity } from "../../props";
 import { type Products } from "../../api/request";
+
+interface History {
+    id: number
+    warehouse_id: number
+    product_id: number
+    quantity: string
+    status: string
+    doing: Date
+}
+
 const InfoWarehousesPage = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
@@ -13,9 +23,10 @@ const InfoWarehousesPage = () => {
     const [loading, setLoading] = useState(true)
 
     const [windowData, setWindowData] = useState<Products[] | null>(null)
-
     const [activeAddProduct, setActiveAddProduct] = useState<number | null>(null)
     const [activeDeleteProduct, setActiveDeleteProduct] = useState<number | null>(null)
+
+    const [historyData, setHistoryData] = useState<History[] | null>(null)
 
     const loadStock = async () => {
         try {
@@ -41,7 +52,17 @@ const InfoWarehousesPage = () => {
         }
         load()
         loadStock()
+        loadHistory()
     }, [])
+
+    const loadHistory = async () => {
+        try {
+            const data = await apiFetch<History[]>(`/warehouses/history/${id}`)
+            setHistoryData(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleStock = async (stock: AddStock) => {
         try {
@@ -121,6 +142,19 @@ const InfoWarehousesPage = () => {
                         {activeDeleteProduct === item.id && <SetQuantity warehouses_id={String(id)} product_id={item.id} status='delete' onSubmit={handleDeleteQuantity} />}
                     </>
                 )))
+            }
+            {
+                historyData && (
+                    historyData.map(item => (
+                        <div key={item.id}>
+                            <p> id: {item.id}</p>
+                            <p>product_id: {item.product_id}</p>
+                            <p>Количество: {item.quantity}</p>
+                            <p>Действие: {item.status}</p>
+                            <p>Дата: {new Date(item.doing).toLocaleString()}</p>
+                        </div>
+                    ))
+                )
             }
             {windowData && (
                 <div className="window-overlay" onClick={() => setWindowData(null)}>

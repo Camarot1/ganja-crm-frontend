@@ -37,6 +37,8 @@ const AddProductsPage = () => {
     }
 
     return (
+        <>
+        <button onClick={() => navigate(-1)}>Вернутся назад</button>
         <form onSubmit={handleAddProducts}>
             <div className="form__input">
                 <p>Название товара</p>
@@ -60,6 +62,7 @@ const AddProductsPage = () => {
             </div>
             <button type="submit">Отправить</button>
         </form>
+        </>
     )
 }
 export default AddProductsPage

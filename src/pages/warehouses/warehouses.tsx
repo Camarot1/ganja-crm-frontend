@@ -29,6 +29,7 @@ const WarehousesPage = () => {
 
     return (
         <div>
+            <button onClick={() => navigate('/addwarehouses')}>Добавить склад</button>
             {warehouses.map(item => (
                 <WarehosesCard
                     key={item.id}

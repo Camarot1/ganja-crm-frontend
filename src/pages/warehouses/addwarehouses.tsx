@@ -35,8 +35,9 @@ const AddWarehousesPage = () => {
         })
     }
 
-    return(
+    return(  
         <form onSubmit={handleAddWarehouses}>
+            <button onClick={() => navigate(-1)}>Вернутся назад</button>
             <div className="form__input">
                 <p>Название</p>
                 <input type="text" name='name' value={formData.name}  onChange={handleUpdate}/>

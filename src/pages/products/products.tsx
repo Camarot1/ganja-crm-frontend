@@ -24,6 +24,7 @@ const ProductPage = ()=>{
 
     return(
         <div>
+            <button onClick={() => navigate('/addproducts')}>Добавить товар</button>
             <button onClick={() => navigate(-1)}>Вернутся назад</button>
             {products.map(item=>(
                 <ProductsCard key={item.id} {...item} />
