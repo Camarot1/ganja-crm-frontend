@@ -75,31 +75,31 @@ export const AddStockCard = (props: AddStockProps) => {
 }
 
 export interface Quantity {
-    quantity: string
+    quantity: number
     warehouses_id: string
-    product_id: number
+    product_id: string
 }
 
 
 
 interface QuantityProps {
-    warehouses_id: string
-    product_id: number
+    warehouses_id?: string
+    product_id: string
     status?: string
-    onSubmit: (data:Quantity) => void
+    onSubmit: (data: Quantity) => void
 }
 
-export const SetQuantity = ({onSubmit, warehouses_id,product_id, status}: QuantityProps) =>{
+export const SetQuantity = ({ onSubmit, warehouses_id, product_id, status }: QuantityProps) => {
 
-    const [input, setInput] = useState('')
+    const [input, setInput] = useState<number | ''>('')
 
-    const handleSubmit = (e:React.FormEvent) =>{
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
 
         const data: Quantity = {
-            quantity: input,
-            warehouses_id: warehouses_id,
-            product_id: product_id 
+            quantity: Number(input),
+            warehouses_id: String(warehouses_id),
+            product_id: product_id
         }
 
         onSubmit(data)
@@ -107,14 +107,35 @@ export const SetQuantity = ({onSubmit, warehouses_id,product_id, status}: Quanti
 
     }
 
-    return(
+    return (
         <form onSubmit={handleSubmit} className="addquantity">
             <div>
                 <p>Количество</p>
-                <input type="text" name="quantity" value={input} onChange={(a) => setInput(a.target.value)} />
+                <input type="number" name="quantity" value={input} onChange={(a) => setInput(Number(a.target.value))} />
                 <button type="submit">{status === 'delete' ? 'Удалить' : 'Добавить'}</button>
             </div>
 
         </form>
+    )
+}
+
+interface HistoryProps{
+    id: number
+    warehouse_id: number
+    product_id: number
+    quantity: string
+    status: string
+    doing: Date
+}
+
+export const HistoryProps = (item: HistoryProps) => {
+    return (
+        <div className='history-props'>
+            <p> id: {item.id}</p>
+            <p>product_id: {item.product_id}</p>
+            <p>Количество: {item.quantity}</p>
+            <p>Действие: {item.status}</p>
+            <p>Дата: {new Date(item.doing).toLocaleString()}</p>
+        </div>
     )
 }

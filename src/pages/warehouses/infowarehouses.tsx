@@ -2,7 +2,7 @@ import { apiFetch, type Warehouses, type InfoStock } from "../../api/request";
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import './warehouses.scss'
-import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity } from "../../props";
+import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity, HistoryProps } from "../../props";
 import { type Products } from "../../api/request";
 
 interface History {
@@ -52,8 +52,17 @@ const InfoWarehousesPage = () => {
         }
         load()
         loadStock()
-        loadHistory()
     }, [])
+    useEffect(() => {
+        if (historyData || windowData) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [historyData, windowData]);
 
     const loadHistory = async () => {
         try {
@@ -95,12 +104,14 @@ const InfoWarehousesPage = () => {
 
     const handleDeleteQuantity = async (data: Quantity) => {
         try {
-            await apiFetch('/products/removequantity', {
+            const response: any = await apiFetch('/products/removequantity', {
                 method: "POST",
                 body: JSON.stringify(data)
             })
+
+            alert(response.message)
             loadStock()
-        } catch (error) {
+        } catch (error: any) {
             console.log(error)
         }
     }
@@ -120,6 +131,7 @@ const InfoWarehousesPage = () => {
     return (
         <div className="info-warehouses">
             <button onClick={() => navigate(`/warehouses`)}>Список складов</button>
+            <button onClick={() => loadHistory()}>История действий на складе</button>
             {warehouses?.map(item => (
                 <WarehosesCard key={item.id} {...item} />
             ))}
@@ -137,23 +149,22 @@ const InfoWarehousesPage = () => {
                             onClick={() => handleWindowData(item.id)}
                             buttonText={'Информация по товару'} />
                         <button onClick={() => setActiveAddProduct(activeAddProduct === item.id ? null : item.id)}>{activeAddProduct === item.id ? 'Закрыть' : 'Увеличение товара'}</button>
-                        {activeAddProduct === item.id && <SetQuantity warehouses_id={String(id)} product_id={item.id} onSubmit={handleAddQuantity} />}
+                        {activeAddProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} onSubmit={handleAddQuantity} />}
                         <button onClick={() => setActiveDeleteProduct(activeDeleteProduct === item.id ? null : item.id)}>{activeDeleteProduct === item.id ? 'Закрыть' : 'Уменьшение товара'}</button>
-                        {activeDeleteProduct === item.id && <SetQuantity warehouses_id={String(id)} product_id={item.id} status='delete' onSubmit={handleDeleteQuantity} />}
+                        {activeDeleteProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} status='delete' onSubmit={handleDeleteQuantity} />}
                     </>
                 )))
             }
+
             {
                 historyData && (
-                    historyData.map(item => (
-                        <div key={item.id}>
-                            <p> id: {item.id}</p>
-                            <p>product_id: {item.product_id}</p>
-                            <p>Количество: {item.quantity}</p>
-                            <p>Действие: {item.status}</p>
-                            <p>Дата: {new Date(item.doing).toLocaleString()}</p>
+                    <div className="window-overlay" onClick={() => setHistoryData(null)}>
+                        <div className="window-content" onClick={(e) => e.stopPropagation()}>
+                            {historyData.map(item => (
+                                <HistoryProps key={item.id} {...item} />
+                            ))}
                         </div>
-                    ))
+                    </div>
                 )
             }
             {windowData && (

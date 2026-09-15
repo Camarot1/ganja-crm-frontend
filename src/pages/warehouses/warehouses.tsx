@@ -24,7 +24,7 @@ const WarehousesPage = () => {
 
         return () => { cancelled = true }
     }, []);
-
+    
     if (loading) return (<div>Загрузка</div>)
 
     return (
