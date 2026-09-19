@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .warehouses__block {
     display: flex;
     align-items: center;
@@ -36,4 +42,50 @@
     overflow-y: auto;
 
     scroll-behavior: smooth;
+}
+
+
+@mixin column {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.warehouses__buttons {
+    @include column;
+    align-items: start;
+    gap: 7px;
+
+    margin: 10px 0 0 10px;
+
+    button {
+        font-size: 1em;
+    }
+}
+
+.info-warehouses {
+    margin-left: 20px;
+    margin-top: 10px;
+
+    .title {
+        font-size: 2em;
+        align-self: center;
+    }
+
+    * {
+        font-size: 1em;
+    }
+
+    @include column;
+    align-items: flex-start;
+    gap: 10px;
+
+
+
+    .infoStock {
+        align-self: center;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
 }

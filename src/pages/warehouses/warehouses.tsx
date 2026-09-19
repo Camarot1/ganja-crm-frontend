@@ -24,12 +24,15 @@ const WarehousesPage = () => {
 
         return () => { cancelled = true }
     }, []);
-    
+
     if (loading) return (<div>Загрузка</div>)
 
     return (
         <div>
-            <button onClick={() => navigate('/addwarehouses')}>Добавить склад</button>
+            <div className="warehouses__buttons">
+                <button onClick={() => navigate('/')}>На главную</button>
+                <button onClick={() => navigate('/addwarehouses')}>Добавить склад</button>
+            </div>
             {warehouses.map(item => (
                 <WarehosesCard
                     key={item.id}

@@ -4,10 +4,10 @@ import './props.scss'
 export const WarehosesCard = (props: WarehousesProps) => {
     return (
         <div className="warehouses-props">
-            <p>ID: {props.id}</p>
-            <p>Код склада: {props.code}</p>
-            <p>Название: {props.name}</p>
-            <p>Адрес: {props.address}</p>
+            <p>ID | {props.id}</p>
+            <p>Код склада | {props.code}</p>
+            <p>Название | {props.name}</p>
+            <p>Адрес | {props.address}</p>
             <p> {props.is_active === 1 ? 'Активен' : 'Неактивен'}</p>
             {props.onClick && <button onClick={props.onClick}>{props.buttonText}</button>}
         </div>
@@ -61,13 +61,15 @@ export const AddStockCard = (props: AddStockProps) => {
 
     return (
         <form onSubmit={handleAddStock} className='AddStockCard'>
-            <div>
-                <p>Количество</p>
-                <input type="number" name="quantity" value={stockFormData.quantity} onChange={handleUpdate} />
-            </div>
-            <div>
-                <p>Айди товара</p>
-                <input type="number" name="product_id" value={stockFormData.product_id} onChange={handleUpdate} />
+            <div className="row">
+                <div className="row-block">
+                    <p>Количество</p>
+                    <input type="number" name="quantity" value={stockFormData.quantity} onChange={handleUpdate} />
+                </div>
+                <div className="row-block">
+                    <p>Айди товара</p>
+                    <input type="number" name="product_id" value={stockFormData.product_id} onChange={handleUpdate} />
+                </div>
             </div>
             <button type='submit'>Отправить</button>
         </form>
@@ -119,7 +121,7 @@ export const SetQuantity = ({ onSubmit, warehouses_id, product_id, status }: Qua
     )
 }
 
-interface HistoryProps{
+interface HistoryProps {
     id: number
     warehouse_id: number
     product_id: number

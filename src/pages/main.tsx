@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import './main.scss'
 const MainPage = ()=> {
     const navigate = useNavigate()
     return(
-        <div>
+        <div className="mainPage">
             <div className="block">
                 <p>Товары</p>
                 <button onClick={() => navigate('/products')}>Перейти</button>

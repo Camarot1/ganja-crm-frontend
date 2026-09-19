@@ -5,6 +5,7 @@ import './warehouses.scss'
 import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity, HistoryProps } from "../../props";
 import { type Products } from "../../api/request";
 
+
 interface History {
     id: number
     warehouse_id: number
@@ -130,32 +131,41 @@ const InfoWarehousesPage = () => {
     if (!warehouses) return (<div>Склад не найден</div>)
     return (
         <div className="info-warehouses">
-            <button onClick={() => navigate(`/warehouses`)}>Список складов</button>
-            <button onClick={() => loadHistory()}>История действий на складе</button>
+            <div className="warehouses__buttons">
+                <button onClick={() => navigate(`/warehouses`)}>Список складов</button>
+                <button onClick={() => loadHistory()}>История действий на складе</button>
+            </div>
             {warehouses?.map(item => (
                 <WarehosesCard key={item.id} {...item} />
             ))}
-            <button onClick={() => setIsActive(!isActive)}>{isActive ? 'Закрыть' : 'Открыть панель добавления'}</button>
-            {isActive && <div className="add-stock">
-                <AddStockCard onSubmit={handleStock} />
-            </div>}
-            <h1>Товары</h1>
-            {infoStock?.length === 0 ? (<div>Товаров на складе нет</div>)
-                :
-                (infoStock?.map(item => (
-                    <>
-                        <ProductsCard key={item.id}
-                            {...item}
-                            onClick={() => handleWindowData(item.id)}
-                            buttonText={'Информация по товару'} />
-                        <button onClick={() => setActiveAddProduct(activeAddProduct === item.id ? null : item.id)}>{activeAddProduct === item.id ? 'Закрыть' : 'Увеличение товара'}</button>
-                        {activeAddProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} onSubmit={handleAddQuantity} />}
-                        <button onClick={() => setActiveDeleteProduct(activeDeleteProduct === item.id ? null : item.id)}>{activeDeleteProduct === item.id ? 'Закрыть' : 'Уменьшение товара'}</button>
-                        {activeDeleteProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} status='delete' onSubmit={handleDeleteQuantity} />}
-                    </>
-                )))
-            }
-
+            <div>
+                <div className="warehouses__buttons">
+                    <button onClick={() => setIsActive(!isActive)}>{isActive ? 'Закрыть' : 'Открыть панель добавления'}</button>
+                </div>
+                {isActive && <div className="add-stock">
+                    <AddStockCard onSubmit={handleStock} />
+                </div>}
+            </div>
+            <h1 className="title">Товары</h1>
+            <div className="infoStock">
+                {infoStock?.length === 0 ? (<div>Товаров на складе нет</div>)
+                    :
+                    (infoStock?.map(item => (
+                        <>
+                            <div className="block" key={item.id}>
+                                <ProductsCard key={item.id}
+                                    {...item}
+                                    onClick={() => handleWindowData(item.id)}
+                                    buttonText={'Информация по товару'} />
+                                <button onClick={() => setActiveAddProduct(activeAddProduct === item.id ? null : item.id)}>{activeAddProduct === item.id ? 'Закрыть' : 'Увеличение товара'}</button>
+                                {activeAddProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} onSubmit={handleAddQuantity} />}
+                                <button onClick={() => setActiveDeleteProduct(activeDeleteProduct === item.id ? null : item.id)}>{activeDeleteProduct === item.id ? 'Закрыть' : 'Уменьшение товара'}</button>
+                                {activeDeleteProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} status='delete' onSubmit={handleDeleteQuantity} />}
+                            </div>
+                        </>
+                    )))
+                }
+            </div>
             {
                 historyData && (
                     <div className="window-overlay" onClick={() => setHistoryData(null)}>

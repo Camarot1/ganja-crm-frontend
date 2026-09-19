@@ -9,6 +9,7 @@ import InfoProductsPage from './pages/products/infoproducts.tsx';
 
 
 import MainPage from './pages/main.tsx'
+import './props.scss'
 function App() {
     return (
         <Routes>

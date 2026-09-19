@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@mixin column{
+    display: flex;
+    flex-direction: column;
+}
+
+.mainPage{
+    @include column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap:40px;
+    .block{
+        @include column;
+        gap: 10px;
+        *{
+            text-align: center;
+            font-size: 1em;
+        }
+    }
+}

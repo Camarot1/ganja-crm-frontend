@@ -1,0 +1,22 @@
+@mixin column{
+    display: flex;
+    flex-direction: column;
+}
+
+.products__buttons {
+    @include column;
+    align-items: start;
+    gap: 7px;
+
+    margin: 10px 0 0 10px;
+
+    button {
+        font-size: 1em;
+    }
+}
+
+.productsPage{
+    @include column;
+    align-items: start;
+    
+}

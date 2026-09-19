@@ -1,23 +1,68 @@
-*{
+* {
     font-family: Montserrat;
 }
-.AddStockCard{
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@mixin column {
     display: flex;
-    flex-direction: row;
-    gap: 15px;
-    input{
-        border-radius: 5px;
+    flex-direction: column
+}
+
+.AddStockCard {
+    @include column;
+    border-radius: 15px;
+    margin-top: 15px;
+    padding: 20px;
+    gap: 5px;
+
+    .row{
+        @include column;
+        gap: 5px;
     }
-    button{
-        align-self: end;
+
+    p {
+        text-align: center;
+    }
+
+    button {
+        align-self: center;
     }
 }
-.history-props{
+
+.history-props {
     border: 1px solid black;
     padding: 2px;
-    display: flex; 
-    gap:5px;
-    *{
+    display: flex;
+    gap: 5px;
+
+    * {
         text-align: center;
+    }
+}
+
+.products-props {
+    @include column;
+    gap: 10px;
+}
+
+.warehouses-props {
+    @include column;
+    background-color: rgb(238, 238, 238);
+    margin: 15px 20px;
+    align-self: start;
+    padding: 5px;
+    gap: 10px;
+
+    button{
+        font-size: 1.5em;
+    }
+
+    p {
+        font-size: 1.2em;
     }
 }
