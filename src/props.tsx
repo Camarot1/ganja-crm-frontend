@@ -1,5 +1,5 @@
 import { type WarehousesProps } from './api/request'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import './props.scss'
 export const WarehosesCard = (props: WarehousesProps) => {
     return (
@@ -104,7 +104,7 @@ export const SetQuantity = ({ onSubmit, warehouses_id, product_id, status }: Qua
             product_id: product_id
         }
 
-        onSubmit(data)
+        onSubmit(data)  
         setInput('')
 
     }
@@ -138,6 +138,92 @@ export const HistoryProps = (item: HistoryProps) => {
             <p>Количество: {item.quantity}</p>
             <p>Действие: {item.status}</p>
             <p>Дата: {new Date(item.doing).toLocaleString()}</p>
+        </div>
+    )
+}
+
+import { type Products } from './api/request'
+
+interface ProductProps {
+    props: Products[],
+    quantity?: number
+}
+
+export const ProductsSearch = ({ props }: ProductProps) => {
+    const [searchQuery, setSearchQuery] = useState('')
+
+    const filterQuery = useMemo(() => {
+        if (!searchQuery) return []
+
+        const lowerQuery = searchQuery.toLowerCase().trim()
+
+        return props.filter((product) => {
+            return (
+                product.sku?.toLowerCase().trim().includes(lowerQuery) ||
+                product.name?.toLowerCase().trim().includes(lowerQuery)
+            )
+        })
+    }, [searchQuery, props])
+
+    return (
+        <div className="products-search-props">
+            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            <div className="result">
+                <p>Найдено: {filterQuery.length}</p>
+                {filterQuery.map(item => (
+                    <ProductsCard key={item.id} {...item} />
+                ))}
+            </div>
+        </div>
+    )
+}
+
+import { type InfoStock } from './api/request'
+
+interface SearchInWarehouses {
+    props: InfoStock[] | null,
+    id: string,
+    onOpenWindow: (e:number) => void,
+    onAddQuantity: (data:Quantity) => void,
+    onDeleteQuantity: (data: Quantity) => void
+}
+
+export const ProductsSearchInWarehouses = ({ props, id,onOpenWindow, onAddQuantity, onDeleteQuantity }: SearchInWarehouses) => {
+    const [searchQuery, setSearchQuery] = useState('')
+    const [activeAddProduct, setActiveAddProduct] = useState<number | null>(null)
+    const [activeDeleteProduct, setActiveDeleteProduct] = useState<number | null>(null)
+
+
+    const filterQuery = useMemo(() => {
+        if (!searchQuery || !props) return []
+
+        const lowerQuery = searchQuery.toLowerCase().trim()
+        return props.filter(product => {
+            return (
+                product?.name.toLowerCase().trim().includes(lowerQuery) ||
+                product?.sku.toLowerCase().trim().includes(lowerQuery) ||
+                product?.quantity.toLowerCase().trim().includes(lowerQuery)
+            )
+        })
+    }, [searchQuery, props])
+
+    
+
+    return (
+        <div className="products-search-props">
+            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+            <div className="result">
+                <p>Найдено: {filterQuery.length}</p>
+                {filterQuery.map(item => (
+                    <div key={item.id}>
+                        <ProductsCard key={item.id} {...item} onClick={() => onOpenWindow(item.id)} buttonText='Информация по товару'/>
+                        <button onClick={() => setActiveAddProduct(activeAddProduct === item.id ? null : item.id)}>{activeAddProduct === item.id ? 'Закрыть' : 'Увеличение товара'}</button>
+                        {activeAddProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} onSubmit={onAddQuantity} />}
+                        <button onClick={() => setActiveDeleteProduct(activeDeleteProduct === item.id ? null : item.id)}>{activeDeleteProduct === item.id ? 'Закрыть' : 'Уменьшение товара'}</button>
+                        {activeDeleteProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} status='delete' onSubmit={onDeleteQuantity} />}
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

@@ -2,7 +2,8 @@ import { apiFetch, type Warehouses, type InfoStock } from "../../api/request";
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import './warehouses.scss'
-import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity, HistoryProps} from "../../props";
+import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity, HistoryProps, ProductsSearch } from "../../props";
+import { ProductsSearchInWarehouses } from "../../props";
 import { type Products } from "../../api/request";
 
 
@@ -24,12 +25,13 @@ const InfoWarehousesPage = () => {
     const [isActive, setIsActive] = useState(false)
     const [loading, setLoading] = useState(true)
 
+    const [searchProductMenu, setSearchProductMenu] = useState(false)
     const [windowData, setWindowData] = useState<Products[] | null>(null)
     const [activeAddProduct, setActiveAddProduct] = useState<number | null>(null)
     const [activeDeleteProduct, setActiveDeleteProduct] = useState<number | null>(null)
 
     const [historyData, setHistoryData] = useState<History[] | null>(null)
-    
+
 
     const loadStock = async () => {
         try {
@@ -76,11 +78,11 @@ const InfoWarehousesPage = () => {
         }
     }
 
-    const loadProductsList = async () =>{
-        try{
+    const loadProductsList = async () => {
+        try {
             const data = await apiFetch<Products[]>('/products')
             setProductsList(data)
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }
@@ -145,6 +147,7 @@ const InfoWarehousesPage = () => {
             <div className="warehouses__buttons">
                 <button onClick={() => navigate(`/warehouses`)}>Список складов</button>
                 <button onClick={() => loadHistory()}>История действий на складе</button>
+                <button onClick={() => setSearchProductMenu(!searchProductMenu)}>{searchProductMenu ? 'Закрыть' : 'Поиск товаров'}</button>
             </div>
             {warehouses?.map(item => (
                 <WarehosesCard key={item.id} {...item} />
@@ -178,17 +181,17 @@ const InfoWarehousesPage = () => {
                     )))
                 }
             </div>
-            {
-                historyData && (
-                    <div className="window-overlay" onClick={() => setHistoryData(null)}>
-                        <div className="window-content" onClick={(e) => e.stopPropagation()}>
-                            {historyData.map(item => (
-                                <HistoryProps key={item.id} {...item} />
-                            ))}
-                        </div>
+            {/* открывающееся меню  дейстий на складе*/}
+            {historyData && (
+                <div className="window-overlay" onClick={() => setHistoryData(null)}>
+                    <div className="window-content" onClick={(e) => e.stopPropagation()}>
+                        {historyData.map(item => (
+                            <HistoryProps key={item.id} {...item} />
+                        ))}
                     </div>
-                )
-            }
+                </div>
+            )}
+            {/* открывающееся меню расширенной информации о товаре*/}
             {windowData && (
                 <div className="window-overlay" onClick={() => setWindowData(null)}>
                     <div className="window-content" onClick={(e) => e.stopPropagation()}>
@@ -203,18 +206,17 @@ const InfoWarehousesPage = () => {
                     </div>
                 </div>
             )}
+            {/* кнопка в меню добавления нового остатка на складе открывающее поиск товаров в бд */}
             {productsList && (
                 <div className="window-overlay" onClick={() => setProductsList(null)}>
                     <div className="window-content" onClick={(e) => e.stopPropagation()}>
-                        {productsList.map(item => (
-                            <ProductsCard
-                                key={item.id}
-                                {...item}
-                            />
-                        ))}
+                        <ProductsSearch props={productsList}/>
                     </div>
                 </div>
             )}
+            <div className="searchProducts">
+                {searchProductMenu && infoStock && id && <ProductsSearchInWarehouses props={infoStock} id={id} onAddQuantity={handleAddQuantity} onDeleteQuantity={handleDeleteQuantity} onOpenWindow={handleWindowData}/>}
+            </div>
         </div>
     )
 }
