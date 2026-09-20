@@ -2,7 +2,7 @@ import { apiFetch, type Warehouses, type InfoStock } from "../../api/request";
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import './warehouses.scss'
-import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity, HistoryProps } from "../../props";
+import { WarehosesCard, ProductsCard, AddStockCard, type AddStock, type Quantity, SetQuantity, HistoryProps} from "../../props";
 import { type Products } from "../../api/request";
 
 
@@ -20,6 +20,7 @@ const InfoWarehousesPage = () => {
     const navigate = useNavigate()
     const [warehouses, setWarehouses] = useState<Warehouses[] | null>(null)
     const [infoStock, setInfoStock] = useState<InfoStock[] | null>(null)
+    const [productsList, setProductsList] = useState<Products[] | null>(null)
     const [isActive, setIsActive] = useState(false)
     const [loading, setLoading] = useState(true)
 
@@ -28,6 +29,7 @@ const InfoWarehousesPage = () => {
     const [activeDeleteProduct, setActiveDeleteProduct] = useState<number | null>(null)
 
     const [historyData, setHistoryData] = useState<History[] | null>(null)
+    
 
     const loadStock = async () => {
         try {
@@ -70,6 +72,15 @@ const InfoWarehousesPage = () => {
             const data = await apiFetch<History[]>(`/warehouses/history/${id}`)
             setHistoryData(data)
         } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const loadProductsList = async () =>{
+        try{
+            const data = await apiFetch<Products[]>('/products')
+            setProductsList(data)
+        }catch(error){
             console.log(error)
         }
     }
@@ -143,6 +154,7 @@ const InfoWarehousesPage = () => {
                     <button onClick={() => setIsActive(!isActive)}>{isActive ? 'Закрыть' : 'Открыть панель добавления'}</button>
                 </div>
                 {isActive && <div className="add-stock">
+                    <button onClick={() => loadProductsList()}>Загрузить список </button>
                     <AddStockCard onSubmit={handleStock} />
                 </div>}
             </div>
@@ -186,6 +198,18 @@ const InfoWarehousesPage = () => {
                                 {...item}
                                 buttonText={'Закрыть'}
                                 onClick={() => setWindowData(null)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
+            {productsList && (
+                <div className="window-overlay" onClick={() => setProductsList(null)}>
+                    <div className="window-content" onClick={(e) => e.stopPropagation()}>
+                        {productsList.map(item => (
+                            <ProductsCard
+                                key={item.id}
+                                {...item}
                             />
                         ))}
                     </div>

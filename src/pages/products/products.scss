@@ -18,5 +18,10 @@
 .productsPage{
     @include column;
     align-items: start;
-    
+    .products__list{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        align-self: center;
+        gap: 50px 10px;
+    }
 }
