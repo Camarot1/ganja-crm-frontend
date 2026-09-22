@@ -8,9 +8,8 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  base: '/',
   build: {
-    rollupOptions: {
-      input: 'src/index.tsx',
-    }
+    outDir: 'dist'
   }
 })
