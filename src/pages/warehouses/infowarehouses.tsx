@@ -133,6 +133,7 @@ const InfoWarehousesPage = () => {
     const handleWindowData = async (e: number) => {
         try {
             const data = await apiFetch<Products[]>(`/products/${e}`)
+            setSearchProductMenu(false)
             setWindowData(data)
         } catch (error) {
             console.log(error)
@@ -210,12 +211,19 @@ const InfoWarehousesPage = () => {
             {productsList && (
                 <div className="window-overlay" onClick={() => setProductsList(null)}>
                     <div className="window-content" onClick={(e) => e.stopPropagation()}>
-                        <ProductsSearch props={productsList}/>
+                        <ProductsSearch props={productsList} />
                     </div>
                 </div>
             )}
             <div className="searchProducts">
-                {searchProductMenu && infoStock && id && <ProductsSearchInWarehouses props={infoStock} id={id} onAddQuantity={handleAddQuantity} onDeleteQuantity={handleDeleteQuantity} onOpenWindow={handleWindowData}/>}
+                {searchProductMenu && infoStock && id &&
+                    (<div className="window-overlay">
+                        <div className="window-content" onClick={(e) => e.stopPropagation}>
+                            <button onClick={() => setSearchProductMenu(false)}>Закрыть</button>
+                            <ProductsSearchInWarehouses props={infoStock} id={id} onAddQuantity={handleAddQuantity} onDeleteQuantity={handleDeleteQuantity} onOpenWindow={handleWindowData} />
+                        </div>
+                    </div>
+                    )}
             </div>
         </div>
     )

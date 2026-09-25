@@ -202,7 +202,7 @@ export const ProductsSearchInWarehouses = ({ props, id,onOpenWindow, onAddQuanti
             return (
                 product?.name.toLowerCase().trim().includes(lowerQuery) ||
                 product?.sku.toLowerCase().trim().includes(lowerQuery) ||
-                product?.quantity.toLowerCase().trim().includes(lowerQuery)
+                String(product?.id) === lowerQuery
             )
         })
     }, [searchQuery, props])
