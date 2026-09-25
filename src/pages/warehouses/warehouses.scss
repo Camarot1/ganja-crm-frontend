@@ -129,6 +129,15 @@
 
 .layoutwarehouses{
     @include column;
+
+    .warehouseInfo-props{
+        align-self: center;
+        .numbers__row{
+            display: flex;
+            gap:10px;
+        }
+    }
+
     .warehouse__slots{
         display: grid;
         align-self: center;
@@ -142,10 +151,6 @@
         p{
             text-align: center;
         }
-    }
-    
-    .infoStock{
-        display: none;
     }
 }
 

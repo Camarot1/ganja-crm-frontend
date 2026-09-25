@@ -1,14 +1,24 @@
 import { useState, useEffect } from "react";
 import { apiFetch, type Warehouses, type InfoStock } from "../../api/request";
 import { useNavigate, useParams } from "react-router-dom";
-import { ProductsCard, WarehouseSlotsProps } from "../../props";
-import { type WarehouseSlots } from "../../props"
+import { ProductsCard, WarehouseSlotsProps, WarehouseInfoProps } from "../../props";
+import { type WarehouseSlots, type WarehouseInfo } from "../../props"
 import './warehouses.scss'
+
 const LayoutWarehouses = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
 
-    const [infoStock, setInfoStock] = useState<InfoStock[] | null>(null)
+
+    const [warehouseCode, setWarehouseCode] = useState<string>('Название склада')
+    const [warehouseInfo, setWarehouseInfo] = useState<WarehouseInfo>({
+        totalSlots: 12,
+        freeSlots: 5,
+        occupiedSlots: 7,
+        totalStock: 100,
+        allocated: 30,
+        unlocated: 70
+    })
     const [warehouseSlots, setWarehouseSlots] = useState<WarehouseSlots[] | null>([
         {
             id: 1,
@@ -71,7 +81,7 @@ const LayoutWarehouses = () => {
             ]
         },
         {
-            id:4,
+            id: 4,
             warehouse_id: 1,
             code: '004',
             is_active: true,
@@ -106,6 +116,12 @@ const LayoutWarehouses = () => {
                     "id": 1,
                     "name": "Монитор",
                     "sku": "electric-01",
+                    "quantity": "2"
+                },
+                {
+                    "id": 2,
+                    "name": "Монитор",
+                    "sku": "electric-02",
                     "quantity": "2"
                 }
             ]
@@ -153,13 +169,23 @@ const LayoutWarehouses = () => {
     ])
 
     useEffect(() => {
-        loadStock()
+        loadMainData()
     }, [])
 
-    const loadStock = async () => {
+
+    const search = () => {
+        console.log('test')
+        // логика открытия меню поиска передаваемая в пропс инфосклада
+    }
+
+    const loadMainData = async () => {
         try {
-            const data = await apiFetch<InfoStock[]>(`/warehouses/info/${id}`)
-            setInfoStock(data)
+            // логика запроса на бекенд для получения данных о слотах на складе
+            // const data = await apiFetch(`/warehouses/info/${id}/layout)
+            // setWarehouseInfo(data.summary)
+            // setWarehouseSlots(data.slots)
+            // setWarehouseCode(data.name)
+            // придумать еще какие поля нужно будет выводить
         } catch (error) {
             console.log(error)
         }
@@ -167,20 +193,13 @@ const LayoutWarehouses = () => {
 
     return (
         <main className="layoutwarehouses">
+            <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />
             <div className="warehouse__slots">
-
-                { warehouseSlots && (
+                {warehouseSlots && (
                     warehouseSlots.map(item => (
                         <WarehouseSlotsProps {...item} />
                     ))
                 )}
-            </div>
-            <div className="infoStock">
-                {infoStock?.map(item => (
-                    <div key={item.id} className="block">
-                        <ProductsCard {...item} />
-                    </div>
-                ))}
             </div>
         </main>
     )

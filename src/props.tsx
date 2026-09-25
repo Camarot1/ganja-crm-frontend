@@ -228,6 +228,41 @@ export const ProductsSearchInWarehouses = ({ props, id, onOpenWindow, onAddQuant
     )
 }
 
+export interface WarehouseInfo {
+    totalSlots: number
+    freeSlots: number
+    occupiedSlots: number
+    totalStock: number
+    allocated: number
+    unlocated: number
+}
+
+interface WarehouseInfoProps extends WarehouseInfo{
+    code: string
+    openSearch: () => void
+}
+
+export const WarehouseInfoProps = ({code, totalSlots, freeSlots, occupiedSlots, totalStock, allocated, unlocated ,openSearch}: WarehouseInfoProps) => {
+    return (
+        <div className="warehouseInfo-props">
+            <p>Склад {code}</p>
+            <div className="props__numbers">
+                <div className="numbers__row">
+                    <p>{totalSlots} мест</p>
+                    <p>Свободно {freeSlots}</p>
+                    <p>Занято {occupiedSlots}</p>
+                </div>
+                <div className="numbers__row">
+                    <p>{totalStock} предметов</p>
+                    <p>{allocated} разложенно</p>
+                    <p>{unlocated} неразложенно</p>
+                </div>
+                {openSearch && <button onClick={openSearch}>Поиск</button>}
+            </div>
+        </div>
+    )
+}
+
 export interface WarehouseSlots {
     id: number
     warehouse_id: number
@@ -253,10 +288,19 @@ export const WarehouseSlotsProps = ({ id, warehouse_id, code, is_active, product
     )
 }
 
-export interface StockSlot {
-    warehouse_id: number
-    slot_id: number
-    product_id: number
-    quantity: number
+interface SlotInfo {
+    id: number
+    code: string
+    onAdd: (e: number) => void
 }
 
+export interface StockSlot {
+    items: InfoStock[]
+    slot: SlotInfo[]
+}
+
+// export const RemainingProps = ({items, slot}:StockSlot) =>{
+//     return(
+
+//     )
+// }
