@@ -35,7 +35,7 @@ export interface InfoStock{
     name: string
     sku: string
     quantity: string
-    unit: string
+    unit?: string
 }
 
 export type WarehousesProps = Warehouses & {

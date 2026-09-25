@@ -127,6 +127,28 @@
     }
 }
 
+.layoutwarehouses{
+    @include column;
+    .warehouse__slots{
+        display: grid;
+        align-self: center;
+        width: min(1000px, 100%);
+        grid-template-columns: repeat(6, 1fr);
+        gap: 10px;
+    }
+    .warehouseSlots-props{
+        @include column;
+        gap: 5px;
+        p{
+            text-align: center;
+        }
+    }
+    
+    .infoStock{
+        display: none;
+    }
+}
+
 .window-overlay {
     position: fixed;
     inset: 0;
