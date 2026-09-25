@@ -42,7 +42,7 @@
         font-size: 2rem;
         font-weight: 800;
         letter-spacing: .02em;
-        color: var(--text, #1e293b);
+        color: var(--text);
         position: relative;
 
         &::after {
@@ -54,7 +54,7 @@
             width: 64px;
             height: 4px;
             border-radius: 2px;
-            background: linear-gradient(90deg, var(--accent, #4f46e5), var(--success, #059669));
+            background: linear-gradient(90deg, var(--accent), var(--success));
         }
     }
 
@@ -72,8 +72,8 @@
         @include column;
         gap: 10px;
         padding: 14px;
-        background: var(--surface, #fff);
-        border: 1px solid var(--border, #e6eaf2);
+        background: var(--surface);
+        border: 1px solid var(--border);
         border-radius: var(--radius, 14px);
         box-shadow: var(--shadow-sm, 0 1px 3px rgba(15, 23, 42, .08));
 
@@ -93,8 +93,8 @@
     .add-stock {
         margin: 6px 20px 10px;
         padding: 18px;
-        background: var(--surface, #fff);
-        border: 1px solid var(--border, #e6eaf2);
+        background: var(--surface);
+        border: 1px solid var(--border);
         border-radius: var(--radius, 14px);
         box-shadow: var(--shadow-sm, 0 1px 3px rgba(15, 23, 42, .08));
 
@@ -143,10 +143,10 @@
 }
 
 .window-content {
-    background: var(--surface, #fff);
+    background: var(--surface);
     padding: 24px;
     border-radius: var(--radius, 14px);
-    border: 1px solid var(--border, #e6eaf2);
+    border: 1px solid var(--border);
     max-width: 520px;
     width: 100%;
     box-shadow: 0 24px 48px -12px rgba(15, 23, 42, .25);
