@@ -22,14 +22,14 @@
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--radius, 14px);
-        box-shadow: var(--shadow-sm, 0 1px 3px rgba(15, 23, 42, .08));
+        box-shadow: var(--shadow-sm);
 
         transition: transform var(--transition, .2s ease),
                     box-shadow var(--transition, .2s ease);
 
         &:hover {
             transform: translateY(-4px);
-            box-shadow: var(--shadow-md, 0 6px 18px -4px rgba(15, 23, 42, .14));
+            box-shadow: var(--shadow-md);
         }
 
         &:nth-child(1) { animation: main-card-in .4s ease both; }
