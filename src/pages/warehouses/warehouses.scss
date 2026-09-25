@@ -61,6 +61,7 @@
     .infoStock {
         align-self: center;
         display: grid;
+        align-items: start;
         grid-template-columns: repeat(4, 1fr);
         gap: 18px;
         width: min(1400px, 100%);
