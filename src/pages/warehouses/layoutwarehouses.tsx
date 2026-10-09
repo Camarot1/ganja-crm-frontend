@@ -10,6 +10,9 @@ const LayoutWarehouses = () => {
     const navigate = useNavigate()
 
 
+
+    const [activeButton, setActiveButton] = useState(false)
+
     const [warehouseCode, setWarehouseCode] = useState<string>('Название склада')
     const [warehouseInfo, setWarehouseInfo] = useState<WarehouseInfo>({
         totalSlots: 12,
@@ -170,12 +173,30 @@ const LayoutWarehouses = () => {
 
     useEffect(() => {
         loadMainData()
+        // console.log(warehouseSlots[1].products)
     }, [])
-
 
     const search = () => {
         console.log('test')
         // логика открытия меню поиска передаваемая в пропс инфосклада
+    }
+
+    const product = {
+        "id" : 7,
+        "name" : 'Клавиатура',
+        "sku" : "electric-03",
+        "quantity" : "2"
+    }
+
+    const handleAdd = (data: number) => {
+        if (!warehouseSlots) return
+
+        const push = [...warehouseSlots]
+        push[data - 1] = {
+            ...push[data - 1],
+            products: [...push[data - 1].products, product]
+        }
+        setWarehouseSlots(push)
     }
 
     const loadMainData = async () => {
@@ -194,10 +215,13 @@ const LayoutWarehouses = () => {
     return (
         <main className="layoutwarehouses">
             <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />
+            <button className="layout__button" onClick={() => setActiveButton(!activeButton)}>{activeButton ? 'Закрыть' : "Открыть"}</button>
             <div className="warehouse__slots">
                 {warehouseSlots && (
                     warehouseSlots.map(item => (
-                        <WarehouseSlotsProps {...item} />
+                        <>
+                            <WarehouseSlotsProps {...item} onAdd={activeButton ? () => handleAdd(item.id) : undefined} />
+                        </>
                     ))
                 )}
             </div>
@@ -206,3 +230,9 @@ const LayoutWarehouses = () => {
 }
 
 export default LayoutWarehouses
+
+// логика добавления товара который еще не выложен
+// при нажатии на товар который можно получить он капает в useState как значение
+// в каждой карточке места будет кнопка выкладки которая будет появляться только когда мы выбираем товар
+// при нажатии на кнопку делаем пост запрос который ззакидывает значение на сервак
+// тут же обновляем

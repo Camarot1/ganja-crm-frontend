@@ -244,7 +244,7 @@ interface WarehouseInfoProps extends WarehouseInfo{
 
 export const WarehouseInfoProps = ({code, totalSlots, freeSlots, occupiedSlots, totalStock, allocated, unlocated ,openSearch}: WarehouseInfoProps) => {
     return (
-        <div className="warehouseInfo-props">
+        <div className="warehouseInfo-props" key={code}>
             <p>Склад {code}</p>
             <div className="props__numbers">
                 <div className="numbers__row">
@@ -271,7 +271,11 @@ export interface WarehouseSlots {
     products: InfoStock[]
 }
 
-export const WarehouseSlotsProps = ({ id, warehouse_id, code, is_active, products }: WarehouseSlots) => {
+interface WarehouseSlotsprops extends WarehouseSlots{
+    onAdd?: () => void
+}
+
+export const WarehouseSlotsProps = ({ id, warehouse_id, code, is_active, products, onAdd }: WarehouseSlotsprops) => {
     return (
         <div className='warehouseSlots-props' key={id}>
             <p>Номер: {code}</p>
@@ -284,6 +288,7 @@ export const WarehouseSlotsProps = ({ id, warehouse_id, code, is_active, product
                     <p>Количество: {item.quantity}</p>
                 </div>
             ))}
+            {onAdd && <button onClick={onAdd}>Добавить</button> }
         </div>
     )
 }
