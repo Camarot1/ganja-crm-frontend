@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { apiFetch, type Warehouses, type InfoStock } from "../../api/request";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProductsCard, WarehouseSlotsProps, WarehouseInfoProps, SlotsItemsProps } from "../../props";
@@ -323,6 +323,25 @@ const LayoutWarehouses = () => {
 
     }
 
+    const handleAddSlots = () => {
+        if (!warehouseSlots) return
+        setWarehouseSlots(prev => {
+            if(!prev) return prev
+            let nextId = prev?.length + 1
+            const code = String(nextId).padStart( 3, '0')
+
+            const newSlot = {
+                id: nextId,
+                warehouse_id: Number(id),
+                code : code,
+                is_active: true,
+                products: []
+            }
+
+            return [...prev, newSlot]
+        })
+    }
+
 
     const loadMainData = async () => {
         try {
@@ -342,6 +361,7 @@ const LayoutWarehouses = () => {
             <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />
             {activeButton && <button className="layout__button" onClick={() => clearSelect()}>Закрыть</button>}
             <button className="layout__button" onClick={() => setTextMenuOpen(!ifTextMenuOpen)}>{ifTextMenuOpen ? 'Закрыть текстовое представление' : 'Открыть текстовое представление'}</button>
+            <button className="layout__button" onClick={()=> handleAddSlots()}>Добавить новый слот</button>
             <div>{hightlight ? (
                 <div>
                     <p>Выбранно сейчас:</p>
