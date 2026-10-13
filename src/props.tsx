@@ -237,12 +237,12 @@ export interface WarehouseInfo {
     unlocated: number
 }
 
-interface WarehouseInfoProps extends WarehouseInfo{
+interface WarehouseInfoProps extends WarehouseInfo {
     code: string
     openSearch: () => void
 }
 
-export const WarehouseInfoProps = ({code, totalSlots, freeSlots, occupiedSlots, totalStock, allocated, unlocated ,openSearch}: WarehouseInfoProps) => {
+export const WarehouseInfoProps = ({ code, totalSlots, freeSlots, occupiedSlots, totalStock, allocated, unlocated, openSearch }: WarehouseInfoProps) => {
     return (
         <div className="warehouseInfo-props" key={code}>
             <p>Склад {code}</p>
@@ -271,24 +271,34 @@ export interface WarehouseSlots {
     products: InfoStock[]
 }
 
-interface WarehouseSlotsprops extends WarehouseSlots{
+interface WarehouseSlotsprops extends WarehouseSlots {
     onAdd?: () => void
 }
 
-export const WarehouseSlotsProps = ({ id, warehouse_id, code, is_active, products, onAdd }: WarehouseSlotsprops) => {
+export const WarehouseSlotsProps = ({ id, code, is_active, products, onAdd }: WarehouseSlotsprops) => {
     return (
         <div className='warehouseSlots-props' key={id}>
             <p>Номер: {code}</p>
             <p>{is_active ? 'Активен' : 'Неактивен'}</p>
             {products.map(item => (
-                <div key={item.id}>
-                    <p>id Товара: {item.id}</p>
-                    <p>{item.name}</p>
-                    <p>sku: {item.sku}</p>
-                    <p>Количество: {item.quantity}</p>
-                </div>
+                <SlotsItemsProps {...item}/>
             ))}
-            {onAdd && <button onClick={onAdd}>Добавить</button> }
+            {onAdd && <button onClick={onAdd}>Добавить</button>}
+        </div>
+    )
+}
+
+interface SlotsInfoView extends InfoStock{
+    onAdd?: () => void
+}
+
+export const SlotsItemsProps = ({id, name,sku, quantity}: SlotsInfoView) => {
+    return (
+        <div className='slot__item' key={id}>
+            <p>id Товара: {id}</p>
+            <p>{name}</p>
+            <p>sku: {sku}</p>
+            <p>Количество: {quantity}</p>
         </div>
     )
 }

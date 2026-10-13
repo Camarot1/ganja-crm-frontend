@@ -129,12 +129,26 @@
 
 .layoutwarehouses{
     @include column;
+    gap: 15px;
 
     .warehouseInfo-props{
         align-self: center;
         .numbers__row{
             display: flex;
             gap:10px;
+        }
+    }
+
+    .layout__visual{
+        align-self: center;
+        display: grid;
+        width: 80vw;
+        grid-template-columns: repeat(30, 50px);
+        row-gap: 20px;
+        .layout__cube{
+            padding: 10px;
+            border: 1px solid black;
+            text-align: center;
         }
     }
 
@@ -155,6 +169,12 @@
 
     .layout__button{
         align-self: center;
+    }
+
+    .layout__open-menu{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 }
 

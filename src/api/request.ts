@@ -34,7 +34,7 @@ export interface InfoStock{
     id: number
     name: string
     sku: string
-    quantity: string
+    quantity: number
     unit?: string
 }
 

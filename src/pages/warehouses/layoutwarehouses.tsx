@@ -1,19 +1,24 @@
 import { useState, useEffect } from "react";
 import { apiFetch, type Warehouses, type InfoStock } from "../../api/request";
 import { useNavigate, useParams } from "react-router-dom";
-import { ProductsCard, WarehouseSlotsProps, WarehouseInfoProps } from "../../props";
+import { ProductsCard, WarehouseSlotsProps, WarehouseInfoProps, SlotsItemsProps } from "../../props";
 import { type WarehouseSlots, type WarehouseInfo } from "../../props"
 import './warehouses.scss'
+
 
 const LayoutWarehouses = () => {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
 
-
+    const [ifTextMenuOpen, setTextMenuOpen] = useState(false)
 
     const [activeButton, setActiveButton] = useState(false)
 
     const [warehouseCode, setWarehouseCode] = useState<string>('Название склада')
+
+    const [hightlight, setHighlight] = useState<InfoStock | null>(null)
+
+
     const [warehouseInfo, setWarehouseInfo] = useState<WarehouseInfo>({
         totalSlots: 12,
         freeSlots: 5,
@@ -33,13 +38,13 @@ const LayoutWarehouses = () => {
                     "id": 6,
                     "name": "Электрочайник",
                     "sku": "electric-05",
-                    "quantity": "2"
+                    "quantity": 2
                 },
                 {
                     "id": 1,
                     "name": "Монитор",
                     "sku": "electric-01",
-                    "quantity": "2"
+                    "quantity": 2
                 }
             ]
         },
@@ -53,13 +58,13 @@ const LayoutWarehouses = () => {
                     "id": 6,
                     "name": "Электрочайник",
                     "sku": "electric-05",
-                    "quantity": "2"
+                    "quantity": 2
                 },
                 {
                     "id": 1,
                     "name": "Монитор",
                     "sku": "electric-01",
-                    "quantity": "2"
+                    "quantity": 2
                 }
             ]
         },
@@ -73,13 +78,13 @@ const LayoutWarehouses = () => {
                     "id": 6,
                     "name": "Электрочайник",
                     "sku": "electric-05",
-                    "quantity": "2"
+                    "quantity": 2
                 },
                 {
                     "id": 1,
                     "name": "Монитор",
                     "sku": "electric-01",
-                    "quantity": "2"
+                    "quantity": 2
                 }
             ]
         },
@@ -93,13 +98,13 @@ const LayoutWarehouses = () => {
                     "id": 6,
                     "name": "Электрочайник",
                     "sku": "electric-05",
-                    "quantity": "2"
+                    "quantity": 2
                 },
                 {
                     "id": 1,
                     "name": "Монитор",
                     "sku": "electric-01",
-                    "quantity": "2"
+                    "quantity": 2
                 }
             ]
         },
@@ -113,19 +118,19 @@ const LayoutWarehouses = () => {
                     "id": 6,
                     "name": "Электрочайник",
                     "sku": "electric-05",
-                    "quantity": "2"
+                    "quantity": 2
                 },
                 {
                     "id": 1,
                     "name": "Монитор",
                     "sku": "electric-01",
-                    "quantity": "2"
+                    "quantity": 2
                 },
                 {
                     "id": 2,
                     "name": "Монитор",
                     "sku": "electric-02",
-                    "quantity": "2"
+                    "quantity": 2
                 }
             ]
         },
@@ -139,13 +144,13 @@ const LayoutWarehouses = () => {
                     "id": 6,
                     "name": "Электрочайник",
                     "sku": "electric-05",
-                    "quantity": "2"
+                    "quantity": 2
                 },
                 {
                     "id": 1,
                     "name": "Монитор",
                     "sku": "electric-01",
-                    "quantity": "2"
+                    "quantity": 2
                 }
             ]
         },
@@ -159,15 +164,110 @@ const LayoutWarehouses = () => {
                     "id": 6,
                     "name": "Электрочайник",
                     "sku": "electric-05",
-                    "quantity": "2"
+                    "quantity": 2
                 },
                 {
                     "id": 1,
                     "name": "Монитор",
                     "sku": "electric-01",
-                    "quantity": "2"
+                    "quantity": 2
                 }
             ]
+        },
+        {
+            id: 8,
+            warehouse_id: 1,
+            code: '008',
+            is_active: true,
+            products: [
+                {
+                    "id": 6,
+                    "name": "Электрочайник",
+                    "sku": "electric-05",
+                    "quantity": 2
+                },
+                {
+                    "id": 1,
+                    "name": "Монитор",
+                    "sku": "electric-01",
+                    "quantity": 2
+                }
+            ]
+        },
+        {
+            id: 9,
+            warehouse_id: 1,
+            code: '009',
+            is_active: true,
+            products: [
+                {
+                    "id": 6,
+                    "name": "Электрочайник",
+                    "sku": "electric-05",
+                    "quantity": 2
+                },
+                {
+                    "id": 1,
+                    "name": "Монитор",
+                    "sku": "electric-01",
+                    "quantity": 2
+                }
+            ]
+        },
+        {
+            id: 10,
+            warehouse_id: 1,
+            code: '010',
+            is_active: true,
+            products: [
+                {
+                    "id": 6,
+                    "name": "Электрочайник",
+                    "sku": "electric-05",
+                    "quantity": 2
+                },
+                {
+                    "id": 1,
+                    "name": "Монитор",
+                    "sku": "electric-01",
+                    "quantity": 2
+                }
+            ]
+        },
+        {
+            id: 11,
+            warehouse_id: 1,
+            code: '011',
+            is_active: true,
+            products: [
+                {
+                    "id": 6,
+                    "name": "Электрочайник",
+                    "sku": "electric-05",
+                    "quantity": 2
+                },
+                {
+                    "id": 1,
+                    "name": "Монитор",
+                    "sku": "electric-01",
+                    "quantity": 2
+                }
+            ]
+        },
+    ])
+
+    const [notPushItem, setNotPushItem] = useState([
+        {
+            "id": 5,
+            "name": "test5",
+            "sku": "test5",
+            "quantity": 5
+        },
+        {
+            "id": 6,
+            "name": "test6",
+            "sku": "test6",
+            "quantity": 6
         },
     ])
 
@@ -181,23 +281,48 @@ const LayoutWarehouses = () => {
         // логика открытия меню поиска передаваемая в пропс инфосклада
     }
 
-    const product = {
-        "id" : 7,
-        "name" : 'Клавиатура',
-        "sku" : "electric-03",
-        "quantity" : "2"
-    }
 
     const handleAdd = (data: number) => {
         if (!warehouseSlots) return
+        console.log(data)
 
         const push = [...warehouseSlots]
+        if (!hightlight) return
         push[data - 1] = {
             ...push[data - 1],
-            products: [...push[data - 1].products, product]
+            products: [...push[data - 1].products, hightlight]
         }
         setWarehouseSlots(push)
+        const updateList = notPushItem.filter(el => el.id !== hightlight.id)
+
+        setNotPushItem(updateList)
+        setHighlight(null)
+        setActiveButton(false)
     }
+
+    const selectNotPushed = (item: InfoStock) => {
+        setHighlight(item)
+        setActiveButton(!activeButton)
+    }
+
+    const clearSelect = () => {
+        setHighlight(null)
+        setActiveButton(false)
+    }
+
+    const [openStatus, setOpenStatus] = useState(false)
+    const [openMenuInfo, setMenuInfo] = useState<InfoStock[] | null>(null)
+    const [openMenuId, setOpenMenuId] = useState<number | null>(null)
+
+    const openInfo = (id: number) => {
+        if (!warehouseSlots) return
+        let data = warehouseSlots[id - 1]
+        setMenuInfo(data.products)
+        setOpenMenuId(id)
+        setOpenStatus(true)
+
+    }
+
 
     const loadMainData = async () => {
         try {
@@ -215,16 +340,59 @@ const LayoutWarehouses = () => {
     return (
         <main className="layoutwarehouses">
             <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />
-            <button className="layout__button" onClick={() => setActiveButton(!activeButton)}>{activeButton ? 'Закрыть' : "Открыть"}</button>
+            {activeButton && <button className="layout__button" onClick={() => clearSelect()}>Закрыть</button>}
+            <button className="layout__button" onClick={() => setTextMenuOpen(!ifTextMenuOpen)}>{ifTextMenuOpen ? 'Закрыть текстовое представление' : 'Открыть текстовое представление'}</button>
+            <div>{hightlight ? (
+                <div>
+                    <p>Выбранно сейчас:</p>
+                    <p>ID | {hightlight.id}</p>
+                    <p>{hightlight.name}</p>
+                    <p>SKU | {hightlight.sku}</p>
+                    <p>Количество | {hightlight.quantity}</p>
+                </div>
+            ) : 'none'}</div>
             <div className="warehouse__slots">
-                {warehouseSlots && (
+                {ifTextMenuOpen && warehouseSlots && (
                     warehouseSlots.map(item => (
                         <>
-                            <WarehouseSlotsProps {...item} onAdd={activeButton ? () => handleAdd(item.id) : undefined} />
+                            <WarehouseSlotsProps key={item.id} {...item} onAdd={activeButton ? () => handleAdd(item.id) : undefined} />
                         </>
                     ))
                 )}
             </div>
+
+            <section className="layout__visual">
+                {warehouseSlots && warehouseSlots.length > 0 ? (
+                    warehouseSlots.map(item => (
+                        <div className="layout__cube" key={item.id} onClick={() => openInfo(item.id)}>
+                            {item.code}
+                        </div>
+                    ))
+                ) : (<div>ничего нет</div>)}
+            </section>
+
+            <div>
+                {notPushItem.map(item => (
+                    <div key={item.id}>
+                        <p>{item.id}</p>
+                        <p>{item.name}</p>
+                        <p>{item.sku}</p>
+                        <p>{item.quantity}</p>
+                        <button onClick={() => selectNotPushed(item)}>Выбрать</button>
+                    </div>
+                ))}
+            </div>
+            {openStatus && openMenuId && <div className="window-overlay" onClick={() => setOpenStatus(false)}>
+                <div className="window-content layout__open-menu" onClick={(e) => e.stopPropagation()}>
+                    <p>Номер карточки {openMenuId}</p>
+                    {openMenuInfo?.map(item => (
+                        <>
+                            <SlotsItemsProps key={item.id}{...item} />
+                        </>
+                    ))}
+                    {hightlight && openMenuId && <button onClick={() => handleAdd(openMenuId)}>Добавить</button>}
+                </div>
+            </div>}
         </main>
     )
 }
@@ -236,3 +404,4 @@ export default LayoutWarehouses
 // в каждой карточке места будет кнопка выкладки которая будет появляться только когда мы выбираем товар
 // при нажатии на кнопку делаем пост запрос который ззакидывает значение на сервак
 // тут же обновляем
+// UPD логика прописана только на стороне фронта, осталось добавить только взаимодействие с бекендом
