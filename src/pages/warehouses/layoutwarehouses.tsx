@@ -27,234 +27,7 @@ const LayoutWarehouses = () => {
         allocated: 30,
         unlocated: 70
     })
-    const [warehouseSlots, setWarehouseSlots] = useState<WarehouseSlots[] | null>([
-        {
-            id: 1,
-            warehouse_id: 1,
-            code: '001',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 2,
-            warehouse_id: 1,
-            code: '002',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 3,
-            warehouse_id: 1,
-            code: '003',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 4,
-            warehouse_id: 1,
-            code: '004',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 5,
-            warehouse_id: 1,
-            code: '005',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                },
-                {
-                    "id": 2,
-                    "name": "Монитор",
-                    "sku": "electric-02",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 6,
-            warehouse_id: 1,
-            code: '006',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 7,
-            warehouse_id: 1,
-            code: '007',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 8,
-            warehouse_id: 1,
-            code: '008',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 9,
-            warehouse_id: 1,
-            code: '009',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 10,
-            warehouse_id: 1,
-            code: '010',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-        {
-            id: 11,
-            warehouse_id: 1,
-            code: '011',
-            is_active: true,
-            products: [
-                {
-                    "id": 6,
-                    "name": "Электрочайник",
-                    "sku": "electric-05",
-                    "quantity": 2
-                },
-                {
-                    "id": 1,
-                    "name": "Монитор",
-                    "sku": "electric-01",
-                    "quantity": 2
-                }
-            ]
-        },
-    ])
+    const [warehouseSlots, setWarehouseSlots] = useState<WarehouseSlots[] | null>(null)
 
     const [notPushItem, setNotPushItem] = useState([
         {
@@ -285,6 +58,8 @@ const LayoutWarehouses = () => {
     const handleAdd = (data: number) => {
         if (!warehouseSlots) return
         console.log(data)
+        console.log(hightlight)
+
 
         const push = [...warehouseSlots]
         if (!hightlight) return
@@ -323,28 +98,51 @@ const LayoutWarehouses = () => {
 
     }
 
-    const handleAddSlots = () => {
+    const handleAddSlots = async () => {
         if (!warehouseSlots) return
-        setWarehouseSlots(prev => {
-            if(!prev) return prev
-            let nextId = prev?.length + 1
-            const code = String(nextId).padStart( 3, '0')
+        try{
+            await apiFetch(`/warehouses/layout/addslot/${Number(id)}`,{
+                method: 'POST'
+            })
+        }catch(error){
+            alert(error)
+        }finally{
+            loadMainData()
+        }
+    }
 
-            const newSlot = {
-                id: nextId,
-                warehouse_id: Number(id),
-                code : code,
-                is_active: true,
-                products: []
-            }
+    const handleDeleteSlots = async (data: number) => {
+        if(!window.confirm('Удалить слот? Это действие нельзя отменить')) return
+        try{
+            await apiFetch(`/warehouses/layout/deleteslot/${id}`, {
+                method: 'POST',
+                body: JSON.stringify({value: data})
+            })
+            setOpenStatus(false)
+        }catch(error){
+            alert(error)
+        }
+        finally{
+            loadMainData()
+        }
+    }
 
-            return [...prev, newSlot]
-        })
+    const handlePostData = async () => {
+        try{
+            await apiFetch('/warehouses/layout/add', {
+                method: 'POST',
+                body: JSON.stringify(warehouseSlots)
+            })
+        }catch(error){
+            alert(error)
+        }
     }
 
 
     const loadMainData = async () => {
         try {
+            const layout: any = await apiFetch(`/warehouses/layout/${id}`)
+            setWarehouseSlots(layout)
             // логика запроса на бекенд для получения данных о слотах на складе
             // const data = await apiFetch(`/warehouses/info/${id}/layout)
             // setWarehouseInfo(data.summary)
@@ -356,12 +154,14 @@ const LayoutWarehouses = () => {
         }
     }
 
+
     return (
         <main className="layoutwarehouses">
             <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />
             {activeButton && <button className="layout__button" onClick={() => clearSelect()}>Закрыть</button>}
             <button className="layout__button" onClick={() => setTextMenuOpen(!ifTextMenuOpen)}>{ifTextMenuOpen ? 'Закрыть текстовое представление' : 'Открыть текстовое представление'}</button>
             <button className="layout__button" onClick={()=> handleAddSlots()}>Добавить новый слот</button>
+            <button className="layout__button" onClick={() => handlePostData()}>Отправить данные</button>
             <div>{hightlight ? (
                 <div>
                     <p>Выбранно сейчас:</p>
@@ -405,9 +205,10 @@ const LayoutWarehouses = () => {
             {openStatus && openMenuId && <div className="window-overlay" onClick={() => setOpenStatus(false)}>
                 <div className="window-content layout__open-menu" onClick={(e) => e.stopPropagation()}>
                     <p>Номер карточки {openMenuId}</p>
+                    <button onClick={() => handleDeleteSlots(openMenuId)}>Удалить карточку</button>
                     {openMenuInfo?.map(item => (
                         <>
-                            <SlotsItemsProps key={item.id}{...item} />
+                            <SlotsItemsProps key={item.id} {...item} />
                         </>
                     ))}
                     {hightlight && openMenuId && <button onClick={() => handleAdd(openMenuId)}>Добавить</button>}
@@ -418,10 +219,3 @@ const LayoutWarehouses = () => {
 }
 
 export default LayoutWarehouses
-
-// логика добавления товара который еще не выложен
-// при нажатии на товар который можно получить он капает в useState как значение
-// в каждой карточке места будет кнопка выкладки которая будет появляться только когда мы выбираем товар
-// при нажатии на кнопку делаем пост запрос который ззакидывает значение на сервак
-// тут же обновляем
-// UPD логика прописана только на стороне фронта, осталось добавить только взаимодействие с бекендом
