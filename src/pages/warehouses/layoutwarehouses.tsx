@@ -31,13 +31,13 @@ const LayoutWarehouses = () => {
 
     const [notPushItem, setNotPushItem] = useState([
         {
-            "id": 5,
+            "id": 14,
             "name": "test5",
             "sku": "test5",
             "quantity": 5
         },
         {
-            "id": 6,
+            "id": 15,
             "name": "test6",
             "sku": "test6",
             "quantity": 6
@@ -55,24 +55,41 @@ const LayoutWarehouses = () => {
     }
 
 
-    const handleAdd = (data: number) => {
-        if (!warehouseSlots) return
-        console.log(data)
-        console.log(hightlight)
+    // const handleAdd = (data: number) => {
+    //     if (!warehouseSlots) return
+    //     console.log(data)
+    //     console.log(hightlight)
 
 
-        const push = [...warehouseSlots]
-        if (!hightlight) return
-        push[data - 1] = {
-            ...push[data - 1],
-            products: [...push[data - 1].products, hightlight]
+    //     const push = [...warehouseSlots]
+    //     if (!hightlight) return
+    //     push[data - 1] = {
+    //         ...push[data - 1],
+    //         products: [...push[data - 1].products, hightlight]
+    //     }
+    //     setWarehouseSlots(push)
+    //     const updateList = notPushItem.filter(el => el.id !== hightlight.id)
+
+    //     setNotPushItem(updateList)
+    //     setHighlight(null)
+    //     setActiveButton(false)
+    //}
+
+    const handleAdd = async (idCard: number) => {
+        try {
+            await apiFetch(`/warehouses/layout/additem/${id}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    idCard: idCard,
+                    value: hightlight
+                })
+            })
+            loadMainData()
+            if(openStatus) openInfo(idCard)
+            setHighlight(null)
+        } catch (error) {
+            console.log(error)
         }
-        setWarehouseSlots(push)
-        const updateList = notPushItem.filter(el => el.id !== hightlight.id)
-
-        setNotPushItem(updateList)
-        setHighlight(null)
-        setActiveButton(false)
     }
 
     const selectNotPushed = (item: InfoStock) => {
@@ -100,40 +117,40 @@ const LayoutWarehouses = () => {
 
     const handleAddSlots = async () => {
         if (!warehouseSlots) return
-        try{
-            await apiFetch(`/warehouses/layout/addslot/${Number(id)}`,{
+        try {
+            await apiFetch(`/warehouses/layout/addslot/${Number(id)}`, {
                 method: 'POST'
             })
-        }catch(error){
+        } catch (error) {
             alert(error)
-        }finally{
+        } finally {
             loadMainData()
         }
     }
 
     const handleDeleteSlots = async (data: number) => {
-        if(!window.confirm('Удалить слот? Это действие нельзя отменить')) return
-        try{
+        if (!window.confirm('Удалить слот? Это действие нельзя отменить')) return
+        try {
             await apiFetch(`/warehouses/layout/deleteslot/${id}`, {
                 method: 'POST',
-                body: JSON.stringify({value: data})
+                body: JSON.stringify({ value: data })
             })
             setOpenStatus(false)
-        }catch(error){
+        } catch (error) {
             alert(error)
         }
-        finally{
+        finally {
             loadMainData()
         }
     }
 
     const handlePostData = async () => {
-        try{
+        try {
             await apiFetch('/warehouses/layout/add', {
                 method: 'POST',
                 body: JSON.stringify(warehouseSlots)
             })
-        }catch(error){
+        } catch (error) {
             alert(error)
         }
     }
@@ -142,6 +159,7 @@ const LayoutWarehouses = () => {
     const loadMainData = async () => {
         try {
             const layout: any = await apiFetch(`/warehouses/layout/${id}`)
+            if (!layout) return
             setWarehouseSlots(layout)
             // логика запроса на бекенд для получения данных о слотах на складе
             // const data = await apiFetch(`/warehouses/info/${id}/layout)
@@ -160,7 +178,7 @@ const LayoutWarehouses = () => {
             <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />
             {activeButton && <button className="layout__button" onClick={() => clearSelect()}>Закрыть</button>}
             <button className="layout__button" onClick={() => setTextMenuOpen(!ifTextMenuOpen)}>{ifTextMenuOpen ? 'Закрыть текстовое представление' : 'Открыть текстовое представление'}</button>
-            <button className="layout__button" onClick={()=> handleAddSlots()}>Добавить новый слот</button>
+            <button className="layout__button" onClick={() => handleAddSlots()}>Добавить новый слот</button>
             <button className="layout__button" onClick={() => handlePostData()}>Отправить данные</button>
             <div>{hightlight ? (
                 <div>

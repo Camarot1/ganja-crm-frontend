@@ -280,19 +280,26 @@ export const WarehouseSlotsProps = ({ id, code, is_active, products, onAdd }: Wa
         <div className='warehouseSlots-props' key={id}>
             <p>Номер: {code}</p>
             <p>{is_active ? 'Активен' : 'Неактивен'}</p>
-            {products.map(item => (
-                <SlotsItemsProps {...item}/>
-            ))}
+            {products.length > 0 ? (
+                products.map(item => (
+                    <SlotsItemsProps key={item.id} {...item} />
+                ))
+            ) : (
+                <div className='slot__item'>
+                    <p>Пусто</p>
+                </div>
+            )}
             {onAdd && <button onClick={onAdd}>Добавить</button>}
         </div>
-    )
+
+    )   
 }
 
-interface SlotsInfoView extends InfoStock{
+interface SlotsInfoView extends InfoStock {
     onAdd?: () => void
 }
 
-export const SlotsItemsProps = ({id, name,sku, quantity}: SlotsInfoView) => {
+export const SlotsItemsProps = ({ id, name, sku, quantity }: SlotsInfoView) => {
     return (
         <div className='slot__item' key={id}>
             <p>id Товара: {id}</p>
