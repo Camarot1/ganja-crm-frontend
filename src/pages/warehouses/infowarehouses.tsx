@@ -149,6 +149,7 @@ const InfoWarehousesPage = () => {
                 <button onClick={() => navigate(`/warehouses`)}>Список складов</button>
                 <button onClick={() => loadHistory()}>История действий на складе</button>
                 <button onClick={() => setSearchProductMenu(!searchProductMenu)}>{searchProductMenu ? 'Закрыть' : 'Поиск товаров'}</button>
+                <button onClick={() => navigate(`/layoutwarehouses/${id}`)}>Раскладка</button>
             </div>
             {warehouses?.map(item => (
                 <WarehosesCard key={item.id} {...item} />

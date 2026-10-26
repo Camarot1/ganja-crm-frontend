@@ -303,6 +303,10 @@ form {
     }
 }
 
+.slot__item{
+    @include card
+}
+
 @keyframes card-in {
     from {
         opacity: 0;

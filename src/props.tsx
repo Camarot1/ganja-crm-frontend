@@ -104,7 +104,7 @@ export const SetQuantity = ({ onSubmit, warehouses_id, product_id, status }: Qua
             product_id: product_id
         }
 
-        onSubmit(data)  
+        onSubmit(data)
         setInput('')
 
     }
@@ -183,12 +183,12 @@ import { type InfoStock } from './api/request'
 interface SearchInWarehouses {
     props: InfoStock[] | null,
     id: string,
-    onOpenWindow: (e:number) => void,
-    onAddQuantity: (data:Quantity) => void,
+    onOpenWindow: (e: number) => void,
+    onAddQuantity: (data: Quantity) => void,
     onDeleteQuantity: (data: Quantity) => void
 }
 
-export const ProductsSearchInWarehouses = ({ props, id,onOpenWindow, onAddQuantity, onDeleteQuantity }: SearchInWarehouses) => {
+export const ProductsSearchInWarehouses = ({ props, id, onOpenWindow, onAddQuantity, onDeleteQuantity }: SearchInWarehouses) => {
     const [searchQuery, setSearchQuery] = useState('')
     const [activeAddProduct, setActiveAddProduct] = useState<number | null>(null)
     const [activeDeleteProduct, setActiveDeleteProduct] = useState<number | null>(null)
@@ -207,7 +207,7 @@ export const ProductsSearchInWarehouses = ({ props, id,onOpenWindow, onAddQuanti
         })
     }, [searchQuery, props])
 
-    
+
 
     return (
         <div className="products-search-props">
@@ -216,7 +216,7 @@ export const ProductsSearchInWarehouses = ({ props, id,onOpenWindow, onAddQuanti
                 <p>Найдено: {filterQuery.length}</p>
                 {filterQuery.map(item => (
                     <div key={item.id}>
-                        <ProductsCard key={item.id} {...item} onClick={() => onOpenWindow(item.id)} buttonText='Информация по товару'/>
+                        <ProductsCard key={item.id} {...item} onClick={() => onOpenWindow(item.id)} buttonText='Информация по товару' />
                         <button onClick={() => setActiveAddProduct(activeAddProduct === item.id ? null : item.id)}>{activeAddProduct === item.id ? 'Закрыть' : 'Увеличение товара'}</button>
                         {activeAddProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} onSubmit={onAddQuantity} />}
                         <button onClick={() => setActiveDeleteProduct(activeDeleteProduct === item.id ? null : item.id)}>{activeDeleteProduct === item.id ? 'Закрыть' : 'Уменьшение товара'}</button>
@@ -224,6 +224,116 @@ export const ProductsSearchInWarehouses = ({ props, id,onOpenWindow, onAddQuanti
                     </div>
                 ))}
             </div>
+        </div>
+    )
+}
+
+export interface WarehouseInfo {
+    totalSlots: number
+    freeSlots: number
+    occupiedSlots: number
+    totalStock: number
+    allocated: number
+    unlocated: number
+}
+
+interface WarehouseInfoProps extends WarehouseInfo {
+    code: string
+    openSearch: () => void
+}
+
+export const WarehouseInfoProps = ({ code, totalSlots, freeSlots, occupiedSlots, totalStock, allocated, unlocated, openSearch }: WarehouseInfoProps) => {
+    return (
+        <div className="warehouseInfo-props" key={code}>
+            <p>Склад {code}</p>
+            <div className="props__numbers">
+                <div className="numbers__row">
+                    <p>{totalSlots} мест</p>
+                    <p>Свободно {freeSlots}</p>
+                    <p>Занято {occupiedSlots}</p>
+                </div>
+                <div className="numbers__row">
+                    <p>{totalStock} предметов</p>
+                    <p>{allocated} разложенно</p>
+                    <p>{unlocated} неразложенно</p>
+                </div>
+                {openSearch && <button onClick={openSearch}>Поиск</button>}
+            </div>
+        </div>
+    )
+}
+
+export interface WarehouseSlots {
+    id: number
+    warehouse_id: number
+    code: string
+    is_active?: boolean
+    products: InfoStock[]
+}
+
+interface WarehouseSlotsprops extends WarehouseSlots {
+    onAdd?: () => void
+}
+
+export const WarehouseSlotsProps = ({ id, code, is_active, products, onAdd }: WarehouseSlotsprops) => {
+    return (
+        <div className='warehouseSlots-props' key={id}>
+            <p>Номер: {code}</p>
+            <p>{is_active ? 'Активен' : 'Неактивен'}</p>
+            {products.length > 0 ? (
+                products.map(item => (
+                    <SlotsItemsProps key={item.id} {...item} />
+                ))
+            ) : (
+                <div className='slot__item'>
+                    <p>Пусто</p>
+                </div>
+            )}
+            {onAdd && <button onClick={onAdd}>Добавить</button>}
+        </div>
+
+    )
+}
+
+interface SlotsInfoView extends InfoStock {
+    onAdd?: () => void
+}
+
+export const SlotsItemsProps = ({ id, name, sku, quantity }: SlotsInfoView) => {
+    return (
+        <div className='slot__item' key={id}>
+            <p>id Товара: {id}</p>
+            <p>{name}</p>
+            <p>sku: {sku}</p>
+            <p>Количество: {quantity}</p>
+        </div>
+    )
+}
+
+interface SlotInfo {
+    id: number
+    code: string
+    onAdd: (e: number) => void
+}
+
+export interface StockSlot {
+    items: InfoStock[]
+    slot: SlotInfo[]
+}
+
+export interface NotLayout extends InfoStock {
+    table_id: number
+    onSelect: () => void
+}
+
+export const NotLayoutItemProps = ({ table_id, id, name, sku, quantity, onSelect }: NotLayout) => {
+    return (
+        <div key={id}>
+            <p>ID | {id}</p>
+            <p>{name}</p>
+            <p>SKU | {sku}</p>
+            <p>Количество | {quantity}</p>
+            <button onClick={onSelect}>Выбрать</button>
         </div>
     )
 }

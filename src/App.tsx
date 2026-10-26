@@ -6,7 +6,7 @@ import InfoWarehousesPage from './pages/warehouses/infowarehouses.tsx';
 import ProductsPage from './pages/products/products.tsx';
 import AddProductsPage from './pages/products/addproducts.tsx';
 import InfoProductsPage from './pages/products/infoproducts.tsx';
-
+import LayoutWarehouses from './pages/warehouses/layoutwarehouses.tsx';
 
 import MainPage from './pages/main.tsx'
 import './props.scss'
@@ -20,6 +20,7 @@ function App() {
             <Route path="/products" element={<ProductsPage/>} />
             <Route path="/addproducts" element={<AddProductsPage/>} />
             <Route path="/infoproducts/:id" element={<InfoProductsPage/>} />
+            <Route path="/layoutwarehouses/:id" element={<LayoutWarehouses />} />
             <Route path="*" element={<MainPage />} />
         </Routes>
     );
