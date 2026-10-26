@@ -292,7 +292,7 @@ export const WarehouseSlotsProps = ({ id, code, is_active, products, onAdd }: Wa
             {onAdd && <button onClick={onAdd}>Добавить</button>}
         </div>
 
-    )   
+    )
 }
 
 interface SlotsInfoView extends InfoStock {
@@ -321,8 +321,19 @@ export interface StockSlot {
     slot: SlotInfo[]
 }
 
-// export const RemainingProps = ({items, slot}:StockSlot) =>{
-//     return(
+export interface NotLayout extends InfoStock {
+    table_id: number
+    onSelect: () => void
+}
 
-//     )
-// }
+export const NotLayoutItemProps = ({ table_id, id, name, sku, quantity, onSelect }: NotLayout) => {
+    return (
+        <div key={id}>
+            <p>ID | {id}</p>
+            <p>{name}</p>
+            <p>SKU | {sku}</p>
+            <p>Количество | {quantity}</p>
+            <button onClick={onSelect}>Выбрать</button>
+        </div>
+    )
+}

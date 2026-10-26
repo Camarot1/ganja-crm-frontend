@@ -1,8 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { apiFetch, type Warehouses, type InfoStock } from "../../api/request";
 import { useNavigate, useParams } from "react-router-dom";
-import { ProductsCard, WarehouseSlotsProps, WarehouseInfoProps, SlotsItemsProps } from "../../props";
-import { type WarehouseSlots, type WarehouseInfo } from "../../props"
+import {
+    ProductsCard,
+    WarehouseSlotsProps,
+    WarehouseInfoProps,
+    SlotsItemsProps,
+    NotLayoutItemProps
+} from "../../props";
+import { type WarehouseSlots, type WarehouseInfo, type NotLayout } from "../../props"
 import './warehouses.scss'
 
 
@@ -16,33 +22,13 @@ const LayoutWarehouses = () => {
 
     const [warehouseCode, setWarehouseCode] = useState<string>('Название склада')
 
-    const [hightlight, setHighlight] = useState<InfoStock | null>(null)
+    const [hightlight, setHighlight] = useState<NotLayout | null>(null)
 
 
-    const [warehouseInfo, setWarehouseInfo] = useState<WarehouseInfo>({
-        totalSlots: 12,
-        freeSlots: 5,
-        occupiedSlots: 7,
-        totalStock: 100,
-        allocated: 30,
-        unlocated: 70
-    })
+    const [warehouseInfo, setWarehouseInfo] = useState<WarehouseInfo | null>(null)
     const [warehouseSlots, setWarehouseSlots] = useState<WarehouseSlots[] | null>(null)
 
-    const [notPushItem, setNotPushItem] = useState([
-        {
-            "id": 14,
-            "name": "test5",
-            "sku": "test5",
-            "quantity": 5
-        },
-        {
-            "id": 15,
-            "name": "test6",
-            "sku": "test6",
-            "quantity": 6
-        },
-    ])
+    const [notPushItem, setNotPushItem] = useState<NotLayout[] | null>(null)
 
     useEffect(() => {
         loadMainData()
@@ -54,27 +40,6 @@ const LayoutWarehouses = () => {
         // логика открытия меню поиска передаваемая в пропс инфосклада
     }
 
-
-    // const handleAdd = (data: number) => {
-    //     if (!warehouseSlots) return
-    //     console.log(data)
-    //     console.log(hightlight)
-
-
-    //     const push = [...warehouseSlots]
-    //     if (!hightlight) return
-    //     push[data - 1] = {
-    //         ...push[data - 1],
-    //         products: [...push[data - 1].products, hightlight]
-    //     }
-    //     setWarehouseSlots(push)
-    //     const updateList = notPushItem.filter(el => el.id !== hightlight.id)
-
-    //     setNotPushItem(updateList)
-    //     setHighlight(null)
-    //     setActiveButton(false)
-    //}
-
     const handleAdd = async (idCard: number) => {
         try {
             await apiFetch(`/warehouses/layout/additem/${id}`, {
@@ -85,14 +50,14 @@ const LayoutWarehouses = () => {
                 })
             })
             loadMainData()
-            if(openStatus) openInfo(idCard)
-            setHighlight(null)
+            if (openStatus) openInfo(idCard)
+            clearSelect()
         } catch (error) {
             console.log(error)
         }
     }
 
-    const selectNotPushed = (item: InfoStock) => {
+    const selectNotPushed = (item: NotLayout) => {
         setHighlight(item)
         setActiveButton(!activeButton)
     }
@@ -159,13 +124,12 @@ const LayoutWarehouses = () => {
     const loadMainData = async () => {
         try {
             const layout: any = await apiFetch(`/warehouses/layout/${id}`)
+            const notlayout: any = await apiFetch(`/warehouses/layout/notlayout/${id}`)
+            const count : any = await apiFetch(`/warehouses/layout/count/${id}`)
             if (!layout) return
             setWarehouseSlots(layout)
-            // логика запроса на бекенд для получения данных о слотах на складе
-            // const data = await apiFetch(`/warehouses/info/${id}/layout)
-            // setWarehouseInfo(data.summary)
-            // setWarehouseSlots(data.slots)
-            // setWarehouseCode(data.name)
+            setNotPushItem(notlayout)
+            setWarehouseInfo(count)
             // придумать еще какие поля нужно будет выводить
         } catch (error) {
             console.log(error)
@@ -175,7 +139,7 @@ const LayoutWarehouses = () => {
 
     return (
         <main className="layoutwarehouses">
-            <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />
+            {warehouseInfo && <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />}
             {activeButton && <button className="layout__button" onClick={() => clearSelect()}>Закрыть</button>}
             <button className="layout__button" onClick={() => setTextMenuOpen(!ifTextMenuOpen)}>{ifTextMenuOpen ? 'Закрыть текстовое представление' : 'Открыть текстовое представление'}</button>
             <button className="layout__button" onClick={() => handleAddSlots()}>Добавить новый слот</button>
@@ -208,18 +172,13 @@ const LayoutWarehouses = () => {
                     ))
                 ) : (<div>ничего нет</div>)}
             </section>
-
-            <div>
-                {notPushItem.map(item => (
-                    <div key={item.id}>
-                        <p>{item.id}</p>
-                        <p>{item.name}</p>
-                        <p>{item.sku}</p>
-                        <p>{item.quantity}</p>
-                        <button onClick={() => selectNotPushed(item)}>Выбрать</button>
-                    </div>
-                ))}
-            </div>
+            {notPushItem &&
+                <div>
+                    {notPushItem.map(item => (
+                        <NotLayoutItemProps {...item} onSelect={() =>selectNotPushed(item)} />
+                    ))}
+                </div>
+            }
             {openStatus && openMenuId && <div className="window-overlay" onClick={() => setOpenStatus(false)}>
                 <div className="window-content layout__open-menu" onClick={(e) => e.stopPropagation()}>
                     <p>Номер карточки {openMenuId}</p>
