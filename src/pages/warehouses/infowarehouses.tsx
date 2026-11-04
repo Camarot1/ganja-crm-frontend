@@ -44,18 +44,19 @@ const InfoWarehousesPage = () => {
         }
     }
 
+    const loadMainData = async () => {
+        if (!id) navigate('/warehouses')
+        try {
+            const data = await apiFetch<Warehouses[]>(`/warehouses/${id}`)
+            setWarehouses(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
 
-        async function load() {
-            if (!id) navigate('/warehouses')
-            try {
-                const data = await apiFetch<Warehouses[]>(`/warehouses/${id}`)
-                setWarehouses(data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        load()
+        loadMainData()
         loadStock()
     }, [])
     useEffect(() => {
@@ -99,7 +100,8 @@ const InfoWarehousesPage = () => {
                 })
             })
             alert('Товар успешно добавлен')
-            window.location.reload()
+            loadMainData()
+            loadStock()
         } catch (error) {
         }
     }

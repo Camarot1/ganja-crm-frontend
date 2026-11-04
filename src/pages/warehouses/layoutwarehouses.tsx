@@ -109,23 +109,11 @@ const LayoutWarehouses = () => {
         }
     }
 
-    const handlePostData = async () => {
-        try {
-            await apiFetch('/warehouses/layout/add', {
-                method: 'POST',
-                body: JSON.stringify(warehouseSlots)
-            })
-        } catch (error) {
-            alert(error)
-        }
-    }
-
-
     const loadMainData = async () => {
         try {
             const layout: any = await apiFetch(`/warehouses/layout/${id}`)
             const notlayout: any = await apiFetch(`/warehouses/layout/notlayout/${id}`)
-            const count : any = await apiFetch(`/warehouses/layout/count/${id}`)
+            const count: any = await apiFetch(`/warehouses/layout/count/${id}`)
             if (!layout) return
             setWarehouseSlots(layout)
             setNotPushItem(notlayout)
@@ -141,9 +129,9 @@ const LayoutWarehouses = () => {
         <main className="layoutwarehouses">
             {warehouseInfo && <WarehouseInfoProps code={warehouseCode} {...warehouseInfo} openSearch={search} />}
             {activeButton && <button className="layout__button" onClick={() => clearSelect()}>Закрыть</button>}
+            <button className="layout__button" onClick={() => navigate(`/infowarehouses/${id}`)}>Вернуться</button>
             <button className="layout__button" onClick={() => setTextMenuOpen(!ifTextMenuOpen)}>{ifTextMenuOpen ? 'Закрыть текстовое представление' : 'Открыть текстовое представление'}</button>
             <button className="layout__button" onClick={() => handleAddSlots()}>Добавить новый слот</button>
-            <button className="layout__button" onClick={() => handlePostData()}>Отправить данные</button>
             <div>{hightlight ? (
                 <div>
                     <p>Выбранно сейчас:</p>
@@ -175,7 +163,7 @@ const LayoutWarehouses = () => {
             {notPushItem &&
                 <div>
                     {notPushItem.map(item => (
-                        <NotLayoutItemProps {...item} onSelect={() =>selectNotPushed(item)} />
+                        <NotLayoutItemProps {...item} onSelect={() => selectNotPushed(item)} />
                     ))}
                 </div>
             }
