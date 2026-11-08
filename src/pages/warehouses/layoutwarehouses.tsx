@@ -49,13 +49,27 @@ const LayoutWarehouses = () => {
                     value: hightlight
                 })
             })
-            loadMainData()
-            if (openStatus) openInfo(idCard)
+            await loadMainData()
             clearSelect()
         } catch (error) {
             console.log(error)
         }
     }
+
+    // это все костыль чтобы при добавлении товара с открытым меню он добавлялся а не приходилось открывать заново
+    const [pendingOpenId, setPendingOpenId] = useState<number | null>(null)
+    const handleAddOpenMenu = async (idCard: number) => {
+        await handleAdd(idCard)
+        await loadMainData()
+        setPendingOpenId(idCard)
+        openInfo(idCard)
+    }
+    useEffect(()=>{
+        if(pendingOpenId === null) return
+        openInfo(pendingOpenId)
+        setPendingOpenId(null)
+    },[pendingOpenId])
+    // ________
 
     const selectNotPushed = (item: NotLayout) => {
         setHighlight(item)
@@ -111,14 +125,17 @@ const LayoutWarehouses = () => {
 
     const loadMainData = async () => {
         try {
-            const layout: any = await apiFetch(`/warehouses/layout/${id}`)
-            const notlayout: any = await apiFetch(`/warehouses/layout/notlayout/${id}`)
-            const count: any = await apiFetch(`/warehouses/layout/count/${id}`)
-            if (!layout) return
+            const [layout, notlayout, count]: any = await Promise.all([
+                apiFetch(`/warehouses/layout/${id}`),
+                apiFetch(`/warehouses/layout/notlayout/${id}`),
+                apiFetch(`/warehouses/layout/count/${id}`)
+            ])
+            if (!layout) return null
             setWarehouseSlots(layout)
             setNotPushItem(notlayout)
             setWarehouseInfo(count)
             // придумать еще какие поля нужно будет выводить
+            return {layout, notlayout, count}
         } catch (error) {
             console.log(error)
         }
@@ -176,7 +193,7 @@ const LayoutWarehouses = () => {
                             <SlotsItemsProps key={item.id} {...item} />
                         </>
                     ))}
-                    {hightlight && openMenuId && <button onClick={() => handleAdd(openMenuId)}>Добавить</button>}
+                    {hightlight && openMenuId && <button onClick={() => handleAddOpenMenu(openMenuId)}>Добавить</button>}
                 </div>
             </div>}
         </main>
