@@ -29,6 +29,8 @@ export const ProductsCard = (props: ProductsProps) => {
                 <p>{props.is_active === 1 ? 'Товар Активен' : 'Товар неактивен'}</p>
             }
             {props.onClick && <button onClick={props.onClick}>{props.buttonText}</button>}
+            {props.quantity == 0 ? <button onClick={props.onDelete}>Удалить товар</button> 
+            : ''}
         </div>
     )
 }
@@ -114,7 +116,7 @@ export const SetQuantity = ({ onSubmit, warehouses_id, product_id, status }: Qua
             <div>
                 <p>Количество</p>
                 <input type="number" name="quantity" value={input} onChange={(a) => setInput(Number(a.target.value))} />
-                <button type="submit">{status === 'delete' ? 'Удалить' : 'Добавить'}</button>
+                <button type="submit">{status === 'delete' ? 'Убавить' : 'Добавить'}</button>
             </div>
 
         </form>

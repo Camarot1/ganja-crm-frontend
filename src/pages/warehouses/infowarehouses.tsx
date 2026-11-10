@@ -132,6 +132,19 @@ const InfoWarehousesPage = () => {
         }
     }
 
+    const handleDeleteStock = async(warehouse_id: string, product_id: string ) =>{
+        try{
+            const response: any = await apiFetch('/products/removefromstock',{
+                method:"POST",
+                body: JSON.stringify({warehouses_id: warehouse_id, product_id: product_id})
+            })
+            alert(response.message)
+            loadStock()
+        }catch(error:any){
+            console.log(error)
+        }
+    }
+
     const handleWindowData = async (e: number) => {
         try {
             const data = await apiFetch<Products[]>(`/products/${e}`)
@@ -175,7 +188,8 @@ const InfoWarehousesPage = () => {
                                 <ProductsCard key={item.id}
                                     {...item}
                                     onClick={() => handleWindowData(item.id)}
-                                    buttonText={'Информация по товару'} />
+                                    buttonText={'Информация по товару'}
+                                    onDelete={() => handleDeleteStock(String(id), String(item.id))} />
                                 <button onClick={() => setActiveAddProduct(activeAddProduct === item.id ? null : item.id)}>{activeAddProduct === item.id ? 'Закрыть' : 'Увеличение товара'}</button>
                                 {activeAddProduct === item.id && <SetQuantity warehouses_id={id} product_id={String(item.id)} onSubmit={handleAddQuantity} />}
                                 <button onClick={() => setActiveDeleteProduct(activeDeleteProduct === item.id ? null : item.id)}>{activeDeleteProduct === item.id ? 'Закрыть' : 'Уменьшение товара'}</button>

@@ -45,6 +45,8 @@ export type WarehousesProps = Warehouses & {
 
 export type ProductsProps = Partial<InfoStock> & Partial<Products> & {
     onClick?: () => void;
+    onDelete?: () => void;
+    warehouse_id?: string;
     buttonText?: string
 }
 
